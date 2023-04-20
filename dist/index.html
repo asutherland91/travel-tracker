@@ -4,13 +4,65 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis&family=Indie+Flower&display=swap" rel="stylesheet">
+
+  <title>Ghibli Travel</title>
 </head>
 <body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+  <header class="traveler-header">
+    <img class="catbus-logo" src="./images/catbusv3.png" alt="happy catbus with words reading 'Ghibli Travel'"/>
+    <h1>Greetings Traveler</h1>
+    <img class="cute-mini-totoros" src="./images/jumping-totoro.png" alt="two cute totoros one jumping in the air and the other holding a bag"/>
+  </header>
+    <main>
+      <div class="overlay">
+        <div class="traveler-view">
+          <section class="view-trips-area">
+            <h2>View trips</h2>
+            <section class="trip-cards">
+              <!-- <div class="glide">
+                <div class="glide__track" data-glide-el="track">
+                  <ul class="glide__slides">
+                  </ul>
+                </div>
+                <div class="glide__arrows" data-glide-el="controls">
+                  <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                  <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+                </div>
+              </div> -->
+            </section>
+          </section>
+          <section class="request-trip-area">
+            <h2>Request trip</h2>
+            <form>
+              <label for="date">When would you like to go?</label><br>
+              <input type="date" id="date-go-selector"><br>
+              <label for="date">When would you like to return?</label><br>
+              <input type="date" id="date-return-selector"><br>
+              <label for="travNum">How many travelers</label><br>
+              <input type="number" id="traveler-selector" name="travNum" min="1"> <br>
+              <label for="destination-selector">Where do you want to go?</label><br>
+              <select id="destination-selector"><br>
+                <option value="" disabled selected>Select your option</option><br>
+              </select>
+              <button class="submit" id="submit-button">Submit Request</button>
+            </form>
+          </section>
+          <section class="amount-spent-area">
+            <h2>Total spent</h2>
+            <p class="amount-spent-text">You have spent $3000 total on adventures to new worlds</p>
+          </section>
+        </div>
+        <div class="agent-view hidden"></div>
+      </div>
+    </main>
+  </div>
   <script src="bundle.js"></script>
-
+  <!-- <script src="node_modules/@glidejs/glide/dist/glide.min.js"></script>
+  <script>
+    new Glide('.glide').mount()
+  </script> -->
 </body>
 </html>
