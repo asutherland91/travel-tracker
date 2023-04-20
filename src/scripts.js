@@ -12,6 +12,12 @@ import {
 } from './apiCalls'
 
 import './css/styles.css';
+import Glide from '@glidejs/glide'
+// Required Core Stylesheet
+import "@glidejs/glide/dist/css/glide.core.min.css";
+
+// Optional Theme Stylesheet
+import "@glidejs/glide/dist/css/glide.theme.min.css";
 
 // image imports
 import './images/background-img.jpg'
@@ -33,6 +39,8 @@ const submitButton = document.querySelector("#submit-button");
     postNewTrip();
   });
 
+  // new Glide('.glide').mount()
+
 Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
   .then(([destinationData, tripData, travelerData]) => {
     travelerRepository = new TravelerRepository(travelerData.travelers);
@@ -45,7 +53,6 @@ Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
     displayTripCards(tripRepository);
     displayAmountSpent(tripRepository, destinationRepository)
 
-    
   })
 
 function populateDestinationDropdown() {
@@ -56,16 +63,41 @@ function populateDestinationDropdown() {
 }
 
 function displayTripCards() {
+  // let tripsGlide = document.querySelector(".glide__slides");
+  // traveler.getTrips(tripRepository).forEach(trip => {
+  //   let tripCard = document.createElement("li");
+  //   tripCard.classList.add("trip-card");
+  //   tripCard.classList.add("glide__slide");
+  //   tripCard.innerHTML += `
+  //   <p class="card-label">Location:</p> <p class="card-info">${destinationRepository.getDestination(trip.destinationID).destination} </p>
+  //   <p class="card-label">Date:</p> <p>${trip.date} </p>
+  //   <p class="card-label">Duration:</p> <p>${trip.duration} </p>
+  //   <p class="card-label">Status:</p> <p>${trip.status} </p>
+  //   `
+  //   tripsGlide.appendChild(tripCard);
+
+  //   new Glide('.glide', {
+  //     type: 'carousel',
+  //     startAt: 0,
+  //     perView: 1,
+  //     rewind: false,
+  //     peek: {
+  //       before: 0,
+  //       after: 0
+  //     },
+  //     focusAt: "center"
+  //   }).mount()
+  // });
   let tripCards = document.querySelector(".trip-cards")
   tripCards.innerHTML = " ";
   traveler.getTrips(tripRepository).forEach(trip => {
     let tripCard = document.createElement("article");
     tripCard.classList.add("trip-card");
     tripCard.innerHTML += `
-    <p>Location: ${destinationRepository.getDestination(trip.destinationID).destination} </p>
-    <p>Date: ${trip.date} </p>
-    <p>Duration:${trip.duration} </p>
-    <p>Status: ${trip.status} </p> `
+    <p class="card-label">Location:</p> <p class="card-info">${destinationRepository.getDestination(trip.destinationID).destination} </p>
+    <p class="card-label">Date:</p> <p>${trip.date} </p>
+    <p class="card-label">Duration:</p> <p>${trip.duration} </p>
+    <p class="card-label">Status:</p> <p>${trip.status} </p> `
     tripCards.appendChild(tripCard);
   });
   };
