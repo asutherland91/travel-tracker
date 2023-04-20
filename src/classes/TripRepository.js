@@ -10,7 +10,9 @@ class TripRepository {
     return trips;
   };
 
-  
+  addNewTrip(newTrip) {
+    this.trips.push(newTrip);
+  }
 
 }
 

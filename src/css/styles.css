@@ -1,3 +1,88 @@
+* {
+  border: 1px solid red;
+}
+
 body {
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  font-family: 'Dosis', sans-serif;
+
+  margin: 0px;
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  background-color:rgba(240, 248, 255, 0.356)
+}
+
+main {
+  background-image: url("../images/background-img.jpg") ;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: relative;
+}
+
+/* text */
+
+h1, h2 {
+  margin: 0px;
+}
+
+/* header section */
+
+.traveler-header {
+  min-height: 20%;
+  width: 100%;
+  background-color: #589adcb4;
+  display: flex;
+  position: relative;
+}
+
+.catbus-logo {
+  height: 150px
+}
+
+.cute-mini-totoros {
+  height: 100px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  transform: scaleX(-1)
+}
+
+/* card section */
+.trip-cards {
+  width: 80%;
+  height:50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.trip-card {
+  height: 90%;
+  width: 25%;
+  border-radius: 8px;
+  background-color:rgba(240, 248, 255, 0.531)
+}
+
+/* trip request section */
+
+.request-trip-area {
+  width: 20%;
+  height: 100%;
+  position: absolute;
+  right: 0px;
+  top: 30px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  
+}
+
+.amount-spent-area {
+ width: 80%;
 }

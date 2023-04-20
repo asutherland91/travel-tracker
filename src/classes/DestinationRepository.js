@@ -9,6 +9,11 @@ class DestinationRepository {
     });
     return destination;
   };
+
+  getDestinations() {
+    return this.destinations;
+  }
+  
 }
 
 export default DestinationRepository;
