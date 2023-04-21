@@ -1,7 +1,3 @@
-* {
-  border: 1px solid red;
-}
-
 body {
   font-family: 'Dosis', sans-serif;
 
@@ -28,31 +24,71 @@ main {
 
 /* text */
 
-h1, h2, p {
+h1, h2 {
   margin: 0px;
+  font-family: 'Indie Flower', sans-serif;
+}
+
+h1 {
+  margin-top: 2%;
+  margin-left: 2%;
+  color: white
+}
+
+p {
+margin: 0;
+}
+
+.label {
+  margin-top: 50px;
+}
+
+.card-label, .card-info {
+  margin-left: 10px;
 }
 
 .card-label {
   font-family: 'Indie Flower', sans-serif;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .card-info {
   font-size: 16px;
 }
 
+.amount-spent-text {
+  text-align: center;
+}
+
+.view-trips {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+
+.total-spent {
+  font-size: 30px;
+  font-family: 'Indie Flower', sans-serif;
+}
+
+.request-trips {
+  margin-top: 10px;
+}
+
 /* header section */
 
 .traveler-header {
-  min-height: 20%;
+  height: 20%;
   width: 100%;
-  background-color: #589adcb4;
+  background-color: #4b5681;
   display: flex;
   position: relative;
 }
 
 .catbus-logo {
-  height: 150px
+  height: 100px
 }
 
 .cute-mini-totoros {
@@ -66,23 +102,31 @@ h1, h2, p {
 /* card section */
 
 .view-trips-area {
-  width: 80%;
+  width: 75%;
   height: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-top:2%;
+  margin-left:2%;
 }
 
 .trip-cards {
-  /* display: flex; */
-  grid-template-rows: repeat(3, 100%);
+  display: grid;
+  grid-template-columns: repeat(4, 220px);
   gap: 10px;
   width: 100%;
-  height:60%;
+  height:90%;
+  overflow: auto;
 }
 
 .trip-card {
   /* height: 90%;
   width: 25%; */
-  height: 250px;
-  width: 225px;
+  border: 2px solid #576694;
+  height: 210px;
+  width: 195px;
   display: flex;
   flex-direction: column;
   align-items:normal;
@@ -95,23 +139,65 @@ h1, h2, p {
 
 .request-trip-area {
   width: 20%;
-  height: 100%;
+  height: 30%;
   position: absolute;
   right: 0px;
-  top: 30px;
+  top: 0px;
+  margin-right: 2%;
+  margin-top: 2%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  
+  align-items: center;
+  text-align: center;
+  background-color: rgba(240, 248, 255, 0.224);
 }
 
 .amount-spent-area {
- width: 80%;
+  margin-left: 2%;
+  margin-bottom: 2%;
+ width: 100%;
  height:40vh;
  /* position:absolute;
  bottom: 0px; */
 }
 
+/* chart */
+
+.chart-container {
+  width: 100%;
+  height: 35vh;
+  display: flex;
+  justify-content: center;
+}
+
+.chart {
+ 
+}
+
+/* buttons */
+
+button {
+  border-radius: 3px;
+  box-shadow: none;
+  cursor: pointer;
+  background-color:#576694;
+  color: #ffffff;
+  font-family: 'Indie Flower', sans-serif;
+  margin-top: 20px;;
+}
+
+button:hover {
+  background-color:#7FBCF9;
+  transition: 0.7s;
+}
+
+button:focus {
+  outline-color: transparent;
+  outline-style:solid;
+  box-shadow: 0 0 0 2px #ffffff;
+  transition: 0.7s;
+}
 
 /* .glide {
   display: flex;
@@ -119,12 +205,8 @@ h1, h2, p {
   align-items: center;
 }
 .glide__slide {
-  text-align: center;
+  text-align: left;
   height: 150px;
-  line-height: 150px;
-  color: #fff;
-  background: rgb(136, 133, 133);
   font-size: 1em;
   font-weight: 900;
-}
- */
+} */

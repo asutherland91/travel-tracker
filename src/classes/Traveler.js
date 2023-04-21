@@ -20,6 +20,23 @@ class Traveler {
     }, 0);
     return (amountSpent * 1.1).toFixed(2);
   };
+
+  calculateAmountSpentPerTrip(tripRepository, destinationRepository) {
+    const trips = this.getTrips(tripRepository);
+    const filteredTrips = trips.filter(trip => {
+     return trip.status === "approved";
+    });
+      const amountSpentPerTrip = filteredTrips.map(trip => {
+        const destination = destinationRepository.getDestination(trip.destinationID);
+        let cost = 0;
+        cost += (trip.travelers * destination.estimatedFlightCostPerPerson);
+        cost += (trip.duration * destination.estimatedLodgingCostPerDay);
+        cost = (cost * 1.1).toFixed(2);
+        return {[destination.destination]: cost};
+       });
+      console.log(Object.values(amountSpentPerTrip[0]))
+    return amountSpentPerTrip;
+  };
 }
 
 export default Traveler;

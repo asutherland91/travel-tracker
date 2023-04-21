@@ -68,4 +68,12 @@ describe("Traveler", () => {
   it("should calculate the amount of money a traveler has spent in total", () => {
     expect(traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)).to.equal("6776.00");
   })
+
+  it("should calculate the amount of money a traveler has spent per trip", () => {
+    expect(traveler.calculateAmountSpentPerTrip(tripRepository, destinationRepository)).to.deep.equal(
+      [
+      { 'Lima, Peru': '3586.00' },
+      { 'Amsterdam, Netherlands': '3190.00' }
+    ]);
+  })
 });
