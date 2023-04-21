@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dosis&family=Indie+Flower&display=swap" rel="stylesheet">
-
   <title>Ghibli Travel</title>
 </head>
 <body>
@@ -20,8 +19,8 @@
       <div class="overlay">
         <div class="traveler-view">
           <section class="view-trips-area">
-            <h2>View trips</h2>
-            <section class="trip-cards">
+            <h2 class="view-trips">View trips</h2>
+            <section tabindex="0" class="trip-cards">
               <!-- <div class="glide">
                 <div class="glide__track" data-glide-el="track">
                   <ul class="glide__slides">
@@ -35,15 +34,15 @@
             </section>
           </section>
           <section class="request-trip-area">
-            <h2>Request trip</h2>
+            <h2 class="request-trips">Request trip</h2>
             <form>
-              <label for="date">When would you like to go?</label><br>
-              <input type="date" id="date-go-selector"><br>
-              <label for="date">When would you like to return?</label><br>
-              <input type="date" id="date-return-selector"><br>
-              <label for="travNum">How many travelers</label><br>
-              <input type="number" id="traveler-selector" name="travNum" min="1"> <br>
-              <label for="destination-selector">Where do you want to go?</label><br>
+              <label class="label" for="departure-date">When would you like to go?</label><br>
+              <input type="date" id="departure-date"><br>
+              <label class="label" for="return-date">When would you like to return?</label><br>
+              <input type="date" id="return-date"><br>
+              <label class="label" for="traveler-count">How many travelers</label><br>
+              <input type="number" id="traveler-count" name="traveler-count" min="1"> <br>
+              <label class="label" for="destination-selector">Where do you want to go?</label><br>
               <select id="destination-selector"><br>
                 <option value="" disabled selected>Select your option</option><br>
               </select>
@@ -51,8 +50,10 @@
             </form>
           </section>
           <section class="amount-spent-area">
-            <h2>Total spent</h2>
-            <p class="amount-spent-text">You have spent $3000 total on adventures to new worlds</p>
+            <p class="total-spent">Total spent</p>
+            <div class="chart-container">
+              <canvas id="chart"></canvas>
+          </div>
           </section>
         </div>
         <div class="agent-view hidden"></div>
@@ -60,9 +61,5 @@
     </main>
   </div>
   <script src="bundle.js"></script>
-  <!-- <script src="node_modules/@glidejs/glide/dist/glide.min.js"></script>
-  <script>
-    new Glide('.glide').mount()
-  </script> -->
 </body>
 </html>

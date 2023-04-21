@@ -1,23 +1,30 @@
+//3rd party libraries
 const dayjs = require('dayjs')
+import Glide from '@glidejs/glide'
+// Required Core Stylesheet
+import "@glidejs/glide/dist/css/glide.core.min.css";
+// Optional Theme Stylesheet
+import "@glidejs/glide/dist/css/glide.theme.min.css";
+import Chart from 'chart.js/auto';
+Chart.defaults.color = "#000000"
+  // new Glide('.glide').mount()
 
+//class and repo imports
 import DestinationRepository from './classes/DestinationRepository';
 import TripRepository from './classes/TripRepository';
 import TravelerRepository from './classes/TravelerRepository';
 import Traveler from './classes/Traveler'
 
+//api fetches
 import {
   fetchDestinations,
   fetchTrips,
   fetchTravelers
 } from './apiCalls'
 
+//stylesheet import
 import './css/styles.css';
-import Glide from '@glidejs/glide'
-// Required Core Stylesheet
-import "@glidejs/glide/dist/css/glide.core.min.css";
 
-// Optional Theme Stylesheet
-import "@glidejs/glide/dist/css/glide.theme.min.css";
 
 // image imports
 import './images/background-img.jpg'
@@ -39,7 +46,6 @@ const submitButton = document.querySelector("#submit-button");
     postNewTrip();
   });
 
-  // new Glide('.glide').mount()
 
 Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
   .then(([destinationData, tripData, travelerData]) => {
@@ -52,7 +58,7 @@ Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
     tripRepository = new TripRepository(tripData.trips);
     displayTripCards(tripRepository);
     displayAmountSpent(tripRepository, destinationRepository)
-
+    displayAmountSpentChart(tripRepository, destinationRepository)
   })
 
 function populateDestinationDropdown() {
@@ -67,15 +73,14 @@ function displayTripCards() {
   // traveler.getTrips(tripRepository).forEach(trip => {
   //   let tripCard = document.createElement("li");
   //   tripCard.classList.add("trip-card");
+  //   tripsGlide.appendChild(tripCard);
   //   tripCard.classList.add("glide__slide");
   //   tripCard.innerHTML += `
   //   <p class="card-label">Location:</p> <p class="card-info">${destinationRepository.getDestination(trip.destinationID).destination} </p>
-  //   <p class="card-label">Date:</p> <p>${trip.date} </p>
-  //   <p class="card-label">Duration:</p> <p>${trip.duration} </p>
-  //   <p class="card-label">Status:</p> <p>${trip.status} </p>
+  //   <p class="card-label">Date:</p> <p class="card-info">${trip.date} </p>
+  //   <p class="card-label">Duration:</p> <p class="card-info">${trip.duration} days </p>
+  //   <p class="card-label">Status:</p> <p class="card-info">${trip.status} </p>
   //   `
-  //   tripsGlide.appendChild(tripCard);
-
   //   new Glide('.glide', {
   //     type: 'carousel',
   //     startAt: 0,
@@ -93,34 +98,31 @@ function displayTripCards() {
   traveler.getTrips(tripRepository).forEach(trip => {
     let tripCard = document.createElement("article");
     tripCard.classList.add("trip-card");
+    tripCards.appendChild(tripCard);
     tripCard.innerHTML += `
     <p class="card-label">Location:</p> <p class="card-info">${destinationRepository.getDestination(trip.destinationID).destination} </p>
-    <p class="card-label">Date:</p> <p>${trip.date} </p>
-    <p class="card-label">Duration:</p> <p>${trip.duration} </p>
-    <p class="card-label">Status:</p> <p>${trip.status} </p> `
-    tripCards.appendChild(tripCard);
+    <p class="card-label">Date:</p> <p class="card-info">${trip.date} </p>
+    <p class="card-label">Duration:</p> <p class="card-info">${trip.duration} days</p>
+    <p class="card-label">Status:</p> <p class="card-info">${trip.status} </p> `
   });
   };
 
   function displayAmountSpent(tripRepository, destinationRepository) {
-    let amountSpentText = document.querySelector(".amount-spent-text");
+    let amountSpentText = document.querySelector(".total-spent");
     amountSpentText.innerHTML = `
-    <p class="amount-spent-text"> ~You have spent ${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} total on adventures to new worlds~ </p>`
+    <p class="total-spent"> ~You have spent $${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} total on adventures to new worlds~ </p>`
   };
- 
-
 
 function getTripValues() {
-  let dateGoValue = dayjs(document.querySelector("#date-go-selector").value);
-  let dateReturnValue = dayjs(document.querySelector("#date-return-selector").value);
-  let travelerValue = document.querySelector("#traveler-selector").value;
+  let dateGoValue = dayjs(document.querySelector("#departure-date").value);
+  let dateReturnValue = dayjs(document.querySelector("#return-date").value);
+  let travelerValue = document.querySelector("#traveler-count").value;
   let destinationValue = document.querySelector("#destination-selector").value;
   let duration = dateReturnValue.diff(dateGoValue, 'day');
   return {date: dateGoValue.format("YYYY/MM/DD"), destination: destinationValue, travelers: travelerValue, duration: duration}
 }
 
 function postNewTrip() {
-  
     const tripValues = getTripValues();
   
   fetch("http://localhost:3001/api/v1/trips", {
@@ -145,6 +147,26 @@ function postNewTrip() {
     console.log(data)
     tripRepository.addNewTrip(data.newTrip)
     displayTripCards()
+  });
+};
+
+function displayAmountSpentChart(tripRepository, destinationRepository) {
+  const totalCost = traveler.calculateAmountSpentPerTrip(tripRepository, destinationRepository);
+  const labels = totalCost.map(trip => Object.keys(trip)[0]);
+  const data = totalCost.map(trip => Object.values(trip)[0]);
+  new Chart("chart", {
+    type: "bar",
+    data: {
+      datasets: [{
+        label: "Total Amount Spent",
+        backgroundColor: "#7FBDF8",
+        borderColor: "#3C4252",
+        borderWidth: 2,
+        hoverBackgroundColor: "#65ADEF",
+        hoverBorderColor: "#3C4252",
+        data: data,
+      }],
+      labels: labels,
+    },
   })
-  
 };
