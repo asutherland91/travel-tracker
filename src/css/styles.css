@@ -24,19 +24,31 @@ main {
 
 /* text */
 
-h1, h2 {
+h1, h2, .total-spent {
   margin: 0px;
   font-family: 'Indie Flower', sans-serif;
+  color: white;
+  text-shadow:
+    -1px -1px 0 #000,
+     0   -1px 0 #000,
+     1px -1px 0 #000,
+     1px  0   0 #000,
+     1px  1px 0 #000,
+     0    1px 0 #000,
+    -1px  1px 0 #000,
+    -1px  0   0 #000;
 }
 
-h1 {
+.welcome-header {
+  font-size:  32px;
   margin-top: 2%;
   margin-left: 2%;
+  white-space: nowrap;
   color: white
 }
 
 p {
-margin: 0;
+margin: 0px;
 }
 
 .label {
@@ -60,17 +72,16 @@ margin: 0;
   text-align: center;
 }
 
+.view-trips, .request-trips, .total-spent {
+  font-size: 28px;
+}
+
 .view-trips {
   position: absolute;
   top: 0;
   left: 0;
   margin-left: 2%;
   margin-top: 2%;
-}
-
-.total-spent {
-  font-size: 30px;
-  font-family: 'Indie Flower', sans-serif;
 }
 
 .request-trips {
@@ -138,8 +149,8 @@ margin: 0;
 /* trip request section */
 
 .request-trip-area {
-  width: 20%;
-  height: 30%;
+  width: 21%;
+  height: 35%;
   position: absolute;
   right: 0px;
   top: 0px;
@@ -150,6 +161,7 @@ margin: 0;
   flex-wrap: wrap;
   align-items: center;
   text-align: center;
+  border-radius: 8px;
   background-color: rgba(240, 248, 255, 0.224);
 }
 
@@ -158,22 +170,43 @@ margin: 0;
   margin-bottom: 2%;
  width: 100%;
  height:40vh;
- /* position:absolute;
- bottom: 0px; */
 }
 
 /* chart */
 
 .chart-container {
-  width: 100%;
+  width: 96%;
   height: 35vh;
   display: flex;
   justify-content: center;
+  background-color: rgba(240, 248, 255, 0.224);
+  margin-right: 2%;
+  border-radius: 8px;
 }
 
-.chart {
- 
+/* form */
+
+input[type=date] {
+  padding:5px;
+  margin-top: 5px 0;
+  border-radius: 3px;
+  border: 0;
 }
+
+input[type=number] {
+  padding:5px;
+  margin-top :5px;
+  border-radius: 3px;
+  border: 0;
+}
+
+select {
+  padding:5px;
+  margin-top :5px;
+  border-radius: 3px;
+  border: 0;
+}
+
 
 /* buttons */
 
@@ -184,7 +217,7 @@ button {
   background-color:#576694;
   color: #ffffff;
   font-family: 'Indie Flower', sans-serif;
-  margin-top: 20px;;
+  margin-top: 30px;
 }
 
 button:hover {
@@ -197,6 +230,17 @@ button:focus {
   outline-style:solid;
   box-shadow: 0 0 0 2px #ffffff;
   transition: 0.7s;
+}
+
+.hidden {
+  display: none;
+}
+
+button:disabled {
+  background-color: #767c8b;
+  border: none;
+  color:#a1a8ba;
+  cursor: default;
 }
 
 /* .glide {

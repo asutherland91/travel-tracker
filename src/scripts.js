@@ -19,7 +19,8 @@ import Traveler from './classes/Traveler'
 import {
   fetchDestinations,
   fetchTrips,
-  fetchTravelers
+  fetchTravelers,
+  postNewTrip
 } from './apiCalls'
 
 //stylesheet import
@@ -35,25 +36,90 @@ import "./images/jumping-totoro.png"
 let destinationRepository;
 let tripRepository;
 let travelerRepository;
-let traveler; 
+let traveler;
+let pendingTrip;
+
 
 //query selectors
 const submitButton = document.querySelector("#submit-button");
+const errorButton = document.querySelector(".error-button");
+const errorMessage = document.querySelector(".error-message");
+const form = document.querySelector(".form");
+const pendingEstimate = document.querySelector(".pending-estimate");
+const confirmButton = document.querySelector(".confirm-button");
+const cancelButton = document.querySelector(".cancel-button");
+const estimateValue = document.querySelector(".estimate-value");
+const formInputs = document.querySelectorAll("form input");
+const destinationSelector = document.querySelector("#destination-selector");
+const departureDate = document.querySelector("#departure-date");
+
 
 // eventListeners
-  submitButton.addEventListener('click', function (event) {
-    event.preventDefault();
-    postNewTrip();
-  });
+submitButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  pendingTrip = getTripValues();
+  hideForm();
+  showPending();
+  estimateValue.innerHTML = traveler.newTripEstimate(pendingTrip, destinationRepository);
+});
+
+cancelButton.addEventListener('click', event => {
+  event.preventDefault();
+  hidePending();
+  showForm();
+});
+
+departureDate.addEventListener('change', updateMinReturn);
+
+confirmButton.addEventListener('click', event => {
+  event.preventDefault();
+  postNewTrip({
+    id: tripRepository.trips.length + 1,
+    userID: parseInt(traveler.id),
+    destinationID: parseInt(pendingTrip.destinationID),
+    date: pendingTrip.date,
+    travelers: parseInt(pendingTrip.travelers),
+    duration: pendingTrip.duration,
+  })
+  .then(data => {
+    if(data.newTrip){
+      tripRepository.addNewTrip(data.newTrip);
+      displayTripCards();
+      hidePending();
+      showForm();
+    }
+    else{
+      throw new Error();
+    }
+  })
+  .catch(err => {
+    hidePending();
+    showError();
+  })
+});
+
+errorButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  hideError();
+  showForm();
+});
+
+formInputs.forEach(input => {
+  input.addEventListener('change', enableButton)
+});
+
+destinationSelector.addEventListener('change', enableButton);
 
 
 Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
   .then(([destinationData, tripData, travelerData]) => {
     travelerRepository = new TravelerRepository(travelerData.travelers);
     traveler = travelerRepository.getRandomTraveler();
+    displayGreeting(traveler);
    
     destinationRepository = new DestinationRepository(destinationData.destinations);
     populateDestinationDropdown();
+    dateFormatter();
 
     tripRepository = new TripRepository(tripData.trips);
     displayTripCards(tripRepository);
@@ -66,7 +132,7 @@ function populateDestinationDropdown() {
   destinationRepository.getDestinations().forEach(destination => {
     destinationInput.innerHTML += `<option value="${destination.id}">${destination.destination}</option>`
   });
-}
+};
 
 function displayTripCards() {
   // let tripsGlide = document.querySelector(".glide__slides");
@@ -104,14 +170,32 @@ function displayTripCards() {
     <p class="card-label">Date:</p> <p class="card-info">${trip.date} </p>
     <p class="card-label">Duration:</p> <p class="card-info">${trip.duration} days</p>
     <p class="card-label">Status:</p> <p class="card-info">${trip.status} </p> `
-  });
+    });
   };
 
-  function displayAmountSpent(tripRepository, destinationRepository) {
-    let amountSpentText = document.querySelector(".total-spent");
-    amountSpentText.innerHTML = `
-    <p class="total-spent"> ~You have spent $${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} total on adventures to new worlds~ </p>`
-  };
+function displayAmountSpent(tripRepository, destinationRepository) {
+  let amountSpentText = document.querySelector(".total-spent");
+  amountSpentText.innerHTML = `
+  <p class="total-spent"> ~You have spent $${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} total on adventures to new worlds~ </p>`
+};
+
+function dateFormatter() {
+  let date = dayjs();
+  const departureField = document.querySelector("#departure-date");
+  const returnField = document.querySelector("#return-date");
+  departureField.setAttribute("min", date.format("YYYY-MM-DD"));
+  returnField.setAttribute("min", date.add(1, "day").format("YYYY-MM-DD"))
+};
+
+function updateMinReturn() {
+  const returnField = document.querySelector("#return-date");
+  let dateGoValue = dayjs(document.querySelector("#departure-date").value);
+  returnField.setAttribute("min", dateGoValue.add(1, "day").format("YYYY-MM-DD"));
+  if(dayjs(returnField.value).isBefore(dateGoValue)) {
+    returnField.value = dateGoValue.add(1, "day").format("YYYY-MM-DD");
+  }
+  
+};
 
 function getTripValues() {
   let dateGoValue = dayjs(document.querySelector("#departure-date").value);
@@ -119,35 +203,19 @@ function getTripValues() {
   let travelerValue = document.querySelector("#traveler-count").value;
   let destinationValue = document.querySelector("#destination-selector").value;
   let duration = dateReturnValue.diff(dateGoValue, 'day');
-  return {date: dateGoValue.format("YYYY/MM/DD"), destination: destinationValue, travelers: travelerValue, duration: duration}
-}
+  return {date: dateGoValue.format("YYYY/MM/DD"), destinationID: parseInt(destinationValue), travelers: travelerValue, duration: duration}
+};
 
-function postNewTrip() {
-    const tripValues = getTripValues();
-  
-  fetch("http://localhost:3001/api/v1/trips", {
-    method: 'POST',
-    body: JSON.stringify({
-        id: (tripRepository.trips.length + 1),
-        userID: parseInt(traveler.id),
-        destinationID: parseInt(tripValues.destination),
-        date: tripValues.date,
-        travelers: parseInt(tripValues.travelers),
-        duration: tripValues.duration,
-        status: "pending", 
-        suggestedActivities: []
-      }
-    ),
-    headers: {
-      'content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
-    tripRepository.addNewTrip(data.newTrip)
-    displayTripCards()
-  });
+function displayGreeting(traveler) {
+  const greeting = document.querySelector('.welcome-header');
+  greeting.innerHTML = `
+  <h1 class="welcome-header">Greetings ${traveler.getFirstName()}</h1>`
+};
+
+function enableButton() {
+  if(destinationSelector.value && Array.from(formInputs).every(input => input.value)) {
+    submitButton.removeAttribute("disabled");
+  };
 };
 
 function displayAmountSpentChart(tripRepository, destinationRepository) {
@@ -169,4 +237,28 @@ function displayAmountSpentChart(tripRepository, destinationRepository) {
       labels: labels,
     },
   })
+};
+
+function hideForm() {
+form.classList.add("hidden");
+};
+
+function showForm() {
+form.classList.remove("hidden");
+};
+
+function showError() {
+errorMessage.classList.remove("hidden");
+};
+
+function hideError() {
+errorMessage.classList.add("hidden");
+};
+
+function showPending() {
+pendingEstimate.classList.remove("hidden");
+};
+
+function hidePending() {
+pendingEstimate.classList.add("hidden");
 };

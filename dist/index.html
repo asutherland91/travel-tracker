@@ -12,7 +12,7 @@
 <body>
   <header class="traveler-header">
     <img class="catbus-logo" src="./images/catbusv3.png" alt="happy catbus with words reading 'Ghibli Travel'"/>
-    <h1>Greetings Traveler</h1>
+    <h1 class="welcome-header">Greetings Traveler</h1>
     <img class="cute-mini-totoros" src="./images/jumping-totoro.png" alt="two cute totoros one jumping in the air and the other holding a bag"/>
   </header>
     <main>
@@ -35,18 +35,27 @@
           </section>
           <section class="request-trip-area">
             <h2 class="request-trips">Request trip</h2>
-            <form>
+            <section class="error-message hidden"> 
+              <p>Please check your trip request and try again!<button class="error-button">Exit</button></p>
+            </section>
+            <section class="pending-estimate hidden"> 
+              <p>The estimated cost of your trip is: <span class="estimate-value"></span></p>
+              <button class="cancel-button">Cancel</button>
+              <button class="confirm-button">Confirm</button>
+            </section>
+            <form class="form">
               <label class="label" for="departure-date">When would you like to go?</label><br>
-              <input type="date" id="departure-date"><br>
+              <input type="date" id="departure-date"> <br>
               <label class="label" for="return-date">When would you like to return?</label><br>
               <input type="date" id="return-date"><br>
               <label class="label" for="traveler-count">How many travelers</label><br>
-              <input type="number" id="traveler-count" name="traveler-count" min="1"> <br>
+              <input type="number" id="traveler-count" name="traveler-count" min="1" placeholder="travelers"> <br>
               <label class="label" for="destination-selector">Where do you want to go?</label><br>
               <select id="destination-selector"><br>
-                <option value="" disabled selected>Select your option</option><br>
+                <option value="" disabled selected>Select your adventure</option><br>
               </select>
-              <button class="submit" id="submit-button">Submit Request</button>
+              <p class="new-trip-estimate"></p>
+              <button disabled class="submit" id="submit-button">Get Estimate</button>
             </form>
           </section>
           <section class="amount-spent-area">
