@@ -10,14 +10,25 @@
   <title>Ghibli Travel</title>
 </head>
 <body>
-  <header class="traveler-header">
+  <header class="traveler-header hidden">
     <img class="catbus-logo" src="./images/catbusv3.png" alt="happy catbus with words reading 'Ghibli Travel'"/>
     <h1 class="welcome-header">Greetings Traveler</h1>
     <img class="cute-mini-totoros" src="./images/jumping-totoro.png" alt="two cute totoros one jumping in the air and the other holding a bag"/>
   </header>
     <main>
       <div class="overlay">
-        <div class="traveler-view">
+        <section class="login-page">
+          <div class="login-area">
+            <form class="login-form">
+              <label class="label" for="login">Username</label><br>
+              <input type="text" id="login"> <br>
+              <label class="label" for="password">Password</label><br>
+              <input type="password" id="password"><br>
+              <button class="login-button" id="login-button">Login</button>
+            </form>
+          </div>
+        </section>
+        <div class="traveler-view hidden">
           <section class="view-trips-area">
             <h2 class="view-trips">View trips</h2>
             <section tabindex="0" class="trip-cards">

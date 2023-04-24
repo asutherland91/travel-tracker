@@ -55,8 +55,37 @@ describe('Trip Repository', () => {
       "duration": 17,
       "status": "pending",
       "suggestedActivities": []
-    },
-  ]);
+      },
+    ]);
   });
 
+  it("should return an empty array if an incorrect travelerID is given", () => {
+    expect(testRepository.getTrips(70)).to.deep.equal([]);
+  });
+
+  it("should have last item in the array equal the new trip added", () => {
+    let newTrip =  {
+      id: 11,
+      userID: 1,
+      destinationID: 1,
+      date: "2024/01/01",
+      travelers: 1,
+      duration: 8,
+      status: "pending", 
+      suggestedActivities: []
+    };
+    testRepository.addNewTrip(newTrip);
+    expect(testRepository.trips[10]).to.deep.equal(
+      {
+        id: 11,
+        userID: 1,
+        destinationID: 1,
+        date: "2024/01/01",
+        travelers: 1,
+        duration: 8,
+        status: "pending", 
+        suggestedActivities: []
+      }
+    )
+  });
 });

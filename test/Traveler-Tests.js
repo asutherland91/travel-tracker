@@ -65,9 +65,10 @@ describe("Traveler", () => {
     },
   ]);
 });
+
   it("should calculate the amount of money a traveler has spent in total", () => {
     expect(traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)).to.equal("6776.00");
-  })
+  });
 
   it("should calculate the amount of money a traveler has spent per trip", () => {
     expect(traveler.calculateAmountSpentPerTrip(tripRepository, destinationRepository)).to.deep.equal(
@@ -75,5 +76,23 @@ describe("Traveler", () => {
       { 'Lima, Peru': '3586.00' },
       { 'Amsterdam, Netherlands': '3190.00' }
     ]);
-  })
+  });
+
+  it("should return a travelers first name", () => {
+    expect(traveler.getFirstName()).to.equal("Ham");
+  });
+
+  it("should calculate an estimate for a new trip", () => {
+    let trip =  {
+      id: 11,
+      userID: 1,
+      destinationID: 1,
+      date: "2024/01/01",
+      travelers: 1,
+      duration: 10,
+      status: "pending", 
+      suggestedActivities: []
+    };
+    expect(traveler.newTripEstimate(trip, destinationRepository)).to.equal("1210.00");
+  });
 });
