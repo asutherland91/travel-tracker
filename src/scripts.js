@@ -52,6 +52,12 @@ const estimateValue = document.querySelector(".estimate-value");
 const formInputs = document.querySelectorAll("form input");
 const destinationSelector = document.querySelector("#destination-selector");
 const departureDate = document.querySelector("#departure-date");
+const usernameInput = document.querySelector("#login");
+const passwordInput = document.querySelector("#password");
+const travelerHeader = document.querySelector(".traveler-header");
+const loginPage = document.querySelector(".login-page");
+const travelerView = document.querySelector(".traveler-view");
+const loginButton = document.querySelector("#login-button");
 
 
 // eventListeners
@@ -68,6 +74,11 @@ cancelButton.addEventListener('click', event => {
   hidePending();
   showForm();
 });
+
+loginButton.addEventListener('click', event => {
+  event.preventDefault();
+  login();
+})
 
 departureDate.addEventListener('change', updateMinReturn);
 
@@ -105,7 +116,7 @@ errorButton.addEventListener('click', function (event) {
 });
 
 formInputs.forEach(input => {
-  input.addEventListener('change', enableButton)
+  input.addEventListener('change', enableButton);
 });
 
 destinationSelector.addEventListener('change', enableButton);
@@ -114,18 +125,14 @@ destinationSelector.addEventListener('change', enableButton);
 Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
   .then(([destinationData, tripData, travelerData]) => {
     travelerRepository = new TravelerRepository(travelerData.travelers);
-    traveler = travelerRepository.getRandomTraveler();
-    displayGreeting(traveler);
    
     destinationRepository = new DestinationRepository(destinationData.destinations);
     populateDestinationDropdown();
     dateFormatter();
 
     tripRepository = new TripRepository(tripData.trips);
-    displayTripCards(tripRepository);
-    displayAmountSpent(tripRepository, destinationRepository)
-    displayAmountSpentChart(tripRepository, destinationRepository)
-  })
+  
+  });
 
 function populateDestinationDropdown() {
   let destinationInput = document.querySelector("#destination-selector");
@@ -133,6 +140,24 @@ function populateDestinationDropdown() {
     destinationInput.innerHTML += `<option value="${destination.id}">${destination.destination}</option>`
   });
 };
+
+function login() {
+  if(usernameInput.value.startsWith("traveler") && passwordInput.value === "travel") {
+    const userID = parseInt(usernameInput.value.slice(8));
+    traveler = travelerRepository.getTravelerById(userID);
+    displayGreeting();
+    displayTripCards();
+    displayAmountSpent();
+    displayAmountSpentChart();
+    showTravelerView();
+  };
+};
+
+function showTravelerView() {
+  travelerHeader.classList.remove("hidden");
+  travelerView.classList.remove("hidden");
+  loginPage.classList.add("hidden");
+}
 
 function displayTripCards() {
   // let tripsGlide = document.querySelector(".glide__slides");
@@ -159,7 +184,7 @@ function displayTripCards() {
   //     focusAt: "center"
   //   }).mount()
   // });
-  let tripCards = document.querySelector(".trip-cards")
+  let tripCards = document.querySelector(".trip-cards");
   tripCards.innerHTML = " ";
   traveler.getTrips(tripRepository).forEach(trip => {
     let tripCard = document.createElement("article");
@@ -173,7 +198,7 @@ function displayTripCards() {
     });
   };
 
-function displayAmountSpent(tripRepository, destinationRepository) {
+function displayAmountSpent() {
   let amountSpentText = document.querySelector(".total-spent");
   amountSpentText.innerHTML = `
   <p class="total-spent"> ~You have spent $${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} total on adventures to new worlds~ </p>`
@@ -193,8 +218,7 @@ function updateMinReturn() {
   returnField.setAttribute("min", dateGoValue.add(1, "day").format("YYYY-MM-DD"));
   if(dayjs(returnField.value).isBefore(dateGoValue)) {
     returnField.value = dateGoValue.add(1, "day").format("YYYY-MM-DD");
-  }
-  
+  };
 };
 
 function getTripValues() {
@@ -206,7 +230,7 @@ function getTripValues() {
   return {date: dateGoValue.format("YYYY/MM/DD"), destinationID: parseInt(destinationValue), travelers: travelerValue, duration: duration}
 };
 
-function displayGreeting(traveler) {
+function displayGreeting() {
   const greeting = document.querySelector('.welcome-header');
   greeting.innerHTML = `
   <h1 class="welcome-header">Greetings ${traveler.getFirstName()}</h1>`
@@ -218,7 +242,7 @@ function enableButton() {
   };
 };
 
-function displayAmountSpentChart(tripRepository, destinationRepository) {
+function displayAmountSpentChart() {
   const totalCost = traveler.calculateAmountSpentPerTrip(tripRepository, destinationRepository);
   const labels = totalCost.map(trip => Object.keys(trip)[0]);
   const data = totalCost.map(trip => Object.values(trip)[0]);

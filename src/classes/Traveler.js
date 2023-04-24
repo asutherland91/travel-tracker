@@ -2,7 +2,7 @@ class Traveler {
   constructor(traveler) {
     this.id = traveler.id;
     this.name = traveler.name;
-  }
+  };
 
   getTrips(tripRepository) {
     return tripRepository.getTrips(this.id);
@@ -10,15 +10,15 @@ class Traveler {
 
   getFirstName() {
     return this.name.split(' ')[0];
-}
+  };
 
-newTripEstimate(trip, destinationRepository) {
+  newTripEstimate(trip, destinationRepository) {
     let estimate = 0
     const newDestination = destinationRepository.getDestination(trip.destinationID);
     estimate += (trip.travelers * newDestination.estimatedFlightCostPerPerson);
     estimate += (trip.duration * newDestination.estimatedLodgingCostPerDay); 
     return (estimate * 1.1).toFixed(2);
-}
+  };
 
   calculateTotalAmountSpent(tripRepository, destinationRepository) {
     const trips = this.getTrips(tripRepository);
