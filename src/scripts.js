@@ -55,8 +55,6 @@ const usernameInput = document.querySelector("#login");
 const passwordInput = document.querySelector("#password");
 const loginPage = document.querySelector(".login-page");
 const loginButton = document.querySelector("#login-button");
-const searchForm = document.querySelector(".search-form");
-const searchButton = document.querySelector(".search-button");
 
 
 // eventListeners
@@ -66,11 +64,6 @@ submitButton.addEventListener('click', function (event) {
   hideForm();
   showPending();
   estimateValue.innerHTML = traveler.newTripEstimate(pendingTrip, destinationRepository);
-});
-
-searchButton.addEventListener('click', function (event) {
-  event.preventDefault();
-  searchForTraveler();
 });
 
 cancelButton.addEventListener('click', event => {
@@ -214,19 +207,35 @@ function displayPendingCards() {
       event.preventDefault()
       postApprovedTrip(trip)
       .then((data) => {
-        tripRepository.approveTripByID(data.updatedTrip.id)
-        displayPendingCards()
+        if(data) {
+          tripRepository.approveTripByID(data.updatedTrip.id)
+          displayPendingCards()
+        }
+        else {
+          throw new Error;
+        }
       })
+      .catch((error) => {
+        alert("Error fetching data:" + error);
     })
+  })
     document.querySelector(`#delete-trip${trip.id}`).addEventListener("click", (event) => {
       event.preventDefault()
       deleteTrip(trip)
-      .then(() => {
+      .then((data) => {
+        if(data) {
         tripRepository.deleteTripByID(trip.id)
         displayPendingCards()
+        }
+        else {
+          throw new Error;
+        }
+      })
+      .catch((error) => {
+        alert("Error fetching data:" + error);
       })
     })
-  });
+  })
 };
 
 function displayTravelersOnTripsToday() {
@@ -236,12 +245,9 @@ function displayTravelersOnTripsToday() {
 };
 
 function displayEarnings() {
-  const yearlyEarnings = document.querySelector(".amount-earned-this-year");
   const totalEarnings = document.querySelector(".amount-earned-total");
-  yearlyEarnings.innerHTML = 
-  `We have earned ${tripRepository.calculateYearlyAgentEarnings(destinationRepository)} this year!`;
   totalEarnings.innerHTML = 
-  `We have earned ${tripRepository.calculateTotalAgentEarnings(destinationRepository)} overall!`;
+  `We have earned $${tripRepository.calculateYearlyAgentEarnings(destinationRepository)} this year and $${tripRepository.calculateTotalAgentEarnings(destinationRepository)} overall!`;
 };
 
 function displayAmountSpent() {
@@ -286,16 +292,6 @@ function enableButton() {
     submitButton.removeAttribute("disabled");
   };
 };
-
-// function searchForTraveler() {
-//   if()
-//   const travelerName = searchForm.input;
-//   console.log(travelerName)
-//   const userID = travelerRepository.getTravelerByName(travelerName);
-//   console.log(userID)
-//   traveler.getTrips(userID);
-//   traveler.calculateTotalAmountSpent();
-// };
 
 function displayAmountSpentChart() {
   const totalCost = traveler.calculateAmountSpentPerTrip(tripRepository, destinationRepository);

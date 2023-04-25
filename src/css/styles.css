@@ -23,7 +23,7 @@ main {
 
 /* text */
 
-h1, h2, .total-spent {
+.text-styling {
   margin: 0px;
   font-family: 'Indie Flower', sans-serif;
   color: white;
@@ -40,8 +40,7 @@ h1, h2, .total-spent {
 
 .welcome-header {
   font-size:  32px;
-  margin-top: 2%;
-  margin-left: 2%;
+  margin: 2% 0% 0% 2%;
   white-space: nowrap;
   color: white
 }
@@ -79,8 +78,7 @@ margin: 0px;
   position: absolute;
   top: 0;
   left: 0;
-  margin-left: 2%;
-  margin-top: 2%;
+  margin: 2% 0% 0% 2%;
 }
 
 .request-trips {
@@ -118,8 +116,7 @@ margin: 0px;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  margin-top:2%;
-  margin-left:2%;
+  margin: 2% 0% 0% 2%;
 }
 
 .trip-cards, .pending-cards {
@@ -132,8 +129,6 @@ margin: 0px;
 }
 
 .trip-card, .pending-card {
-  /* height: 90%;
-  width: 25%; */
   border: 2px solid #576694;
   height: 210px;
   width: 195px;
@@ -153,8 +148,7 @@ margin: 0px;
   position: absolute;
   right: 0px;
   top: 0px;
-  margin-right: 2%;
-  margin-top: 2%;
+  margin: 2% 2% 0% 0%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -165,8 +159,7 @@ margin: 0px;
 }
 
 .amount-spent-area {
-  margin-left: 2%;
-  margin-bottom: 2%;
+  margin: 0% 0% 2% 2%;
  width: 100%;
  height:40vh;
 }
@@ -201,37 +194,51 @@ select {
 
 /* agent view */
 
-.search-area {
-  display: flex;
-
-}
-
 .agent-view {
   height: 100%;
   width: 100%;
+  display: flex;
+  justify-content: center;
   position: relative;
 }
 
-/* search form area */
-.search-form {
-  background-color:rgba(240, 248, 255, 0.224);
-  height: 40%;
-  width: 30%;
-}
 /* pending trip area */
 
 .pending-trips-section {
   width: 100%;
   height: 55%;
   position: absolute;
-  bottom: 0;
-  margin-left: 2%;
-  margin-bottom: 2%;
+  top: 0;
+  margin: 2% 0% 0% 2%;
 }
 
 .pending-card {
   height: 250px;
   width: 205px;
+}
+
+/* bottom area */
+
+.bottom-wrapper {
+  margin-left: 2%;
+  height: 40%;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 0;
+}
+
+/* amount earned section */
+.amount-earned-total, .amount-of-travelers {
+  font-size: 28px;
+}
+
+/* number of travelers */
+.amount-of-travelers {
+  position: absolute;
+  right: 0;
+  margin: 2% 2% 0% 0%; 
 }
 
 /* login form */
@@ -260,7 +267,6 @@ input[type=text], input[type=password] {
   text-align: center;
 }
 
-
 /* buttons */
 
 button {
@@ -288,12 +294,12 @@ button:focus {
   outline-style:solid;
   box-shadow: 0 0 0 2px #ffffff;
   transition: 0.7s; 
-  }
+}
 
-  .button-wrapper {
+ .button-wrapper {
     display: flex;
     justify-content: space-around;
-  }
+}
 
 .hidden {
   display: none;
@@ -305,15 +311,3 @@ button:disabled {
   color:#a1a8ba;
   cursor: default;
 }
-
-/* .glide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.glide__slide {
-  text-align: left;
-  height: 150px;
-  font-size: 1em;
-  font-weight: 900;
-} */
