@@ -1,3 +1,7 @@
+const dayjs = require('dayjs')
+var isBetween = require('dayjs/plugin/isBetween')
+dayjs.extend(isBetween)
+
 class Traveler {
   constructor(traveler) {
     this.id = traveler.id;
@@ -46,9 +50,22 @@ class Traveler {
         cost = (cost * 1.1).toFixed(2);
         return {[destination.destination]: cost};
        });
-      console.log(Object.values(amountSpentPerTrip[0]))
     return amountSpentPerTrip;
   };
+
+  calculateYearlyAmountSpent(tripRepository, destinationRepository) {
+    const trips = this.getTrips(tripRepository);
+    const amountSpent = trips.reduce((total, trip) => {
+      if(trip.status === "approved" && dayjs(trip.date).isAfter('2022-12-31', 'month')) {
+        const destination = destinationRepository.getDestination(trip.destinationID);
+        total += (trip.travelers * destination.estimatedFlightCostPerPerson);
+        total += (trip.duration * destination.estimatedLodgingCostPerDay);
+      }
+      return total;
+    }, 0);
+    return (amountSpent * 1.1).toFixed(2);
+  };
+  
 }
 
 export default Traveler;

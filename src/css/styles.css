@@ -1,6 +1,5 @@
 body {
   font-family: 'Dosis', sans-serif;
-
   margin: 0px;
 }
 
@@ -123,7 +122,7 @@ margin: 0px;
   margin-left:2%;
 }
 
-.trip-cards {
+.trip-cards, .pending-cards {
   display: grid;
   grid-template-columns: repeat(4, 220px);
   gap: 10px;
@@ -132,7 +131,7 @@ margin: 0px;
   overflow: auto;
 }
 
-.trip-card {
+.trip-card, .pending-card {
   /* height: 90%;
   width: 25%; */
   border: 2px solid #576694;
@@ -200,6 +199,41 @@ select {
   border: 0;
 }
 
+/* agent view */
+
+.search-area {
+  display: flex;
+
+}
+
+.agent-view {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* search form area */
+.search-form {
+  background-color:rgba(240, 248, 255, 0.224);
+  height: 40%;
+  width: 30%;
+}
+/* pending trip area */
+
+.pending-trips-section {
+  width: 100%;
+  height: 55%;
+  position: absolute;
+  bottom: 0;
+  margin-left: 2%;
+  margin-bottom: 2%;
+}
+
+.pending-card {
+  height: 250px;
+  width: 205px;
+}
+
 /* login form */
 input[type=text], input[type=password] {
   padding:7px;
@@ -253,8 +287,13 @@ button:focus {
   outline-color: transparent;
   outline-style:solid;
   box-shadow: 0 0 0 2px #ffffff;
-  transition: 0.7s;
-}
+  transition: 0.7s; 
+  }
+
+  .button-wrapper {
+    display: flex;
+    justify-content: space-around;
+  }
 
 .hidden {
   display: none;

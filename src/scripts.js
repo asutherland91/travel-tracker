@@ -1,13 +1,9 @@
 //3rd party libraries
 const dayjs = require('dayjs')
-import Glide from '@glidejs/glide'
-// Required Core Stylesheet
-import "@glidejs/glide/dist/css/glide.core.min.css";
-// Optional Theme Stylesheet
-import "@glidejs/glide/dist/css/glide.theme.min.css";
 import Chart from 'chart.js/auto';
 Chart.defaults.color = "#000000"
-  // new Glide('.glide').mount()
+var isBetween = require('dayjs/plugin/isBetween')
+dayjs.extend(isBetween)
 
 //class and repo imports
 import DestinationRepository from './classes/DestinationRepository';
@@ -20,7 +16,9 @@ import {
   fetchDestinations,
   fetchTrips,
   fetchTravelers,
-  postNewTrip
+  postNewTrip,
+  postApprovedTrip,
+  deleteTrip
 } from './apiCalls'
 
 //stylesheet import
@@ -38,6 +36,7 @@ let tripRepository;
 let travelerRepository;
 let traveler;
 let pendingTrip;
+let date = dayjs();
 
 
 //query selectors
@@ -49,15 +48,15 @@ const pendingEstimate = document.querySelector(".pending-estimate");
 const confirmButton = document.querySelector(".confirm-button");
 const cancelButton = document.querySelector(".cancel-button");
 const estimateValue = document.querySelector(".estimate-value");
-const formInputs = document.querySelectorAll("form input");
+const formInputs = document.querySelectorAll(".form input");
 const destinationSelector = document.querySelector("#destination-selector");
 const departureDate = document.querySelector("#departure-date");
 const usernameInput = document.querySelector("#login");
 const passwordInput = document.querySelector("#password");
-const travelerHeader = document.querySelector(".traveler-header");
 const loginPage = document.querySelector(".login-page");
-const travelerView = document.querySelector(".traveler-view");
 const loginButton = document.querySelector("#login-button");
+const searchForm = document.querySelector(".search-form");
+const searchButton = document.querySelector(".search-button");
 
 
 // eventListeners
@@ -69,6 +68,11 @@ submitButton.addEventListener('click', function (event) {
   estimateValue.innerHTML = traveler.newTripEstimate(pendingTrip, destinationRepository);
 });
 
+searchButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  searchForTraveler();
+});
+
 cancelButton.addEventListener('click', event => {
   event.preventDefault();
   hidePending();
@@ -78,7 +82,7 @@ cancelButton.addEventListener('click', event => {
 loginButton.addEventListener('click', event => {
   event.preventDefault();
   login();
-})
+});
 
 departureDate.addEventListener('change', updateMinReturn);
 
@@ -121,17 +125,17 @@ formInputs.forEach(input => {
 
 destinationSelector.addEventListener('change', enableButton);
 
-
 Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
   .then(([destinationData, tripData, travelerData]) => {
     travelerRepository = new TravelerRepository(travelerData.travelers);
-   
     destinationRepository = new DestinationRepository(destinationData.destinations);
     populateDestinationDropdown();
     dateFormatter();
 
     tripRepository = new TripRepository(tripData.trips);
-  
+  })
+  .catch((error) => {
+    alert("Error fetching data:" + error);
   });
 
 function populateDestinationDropdown() {
@@ -150,40 +154,32 @@ function login() {
     displayAmountSpent();
     displayAmountSpentChart();
     showTravelerView();
+  }
+  else if(usernameInput.value === "agency" && passwordInput.value === "travel") {
+    displayPendingCards();
+    displayEarnings();
+    displayTravelersOnTripsToday(date);
+    showAgentView();
   };
 };
 
 function showTravelerView() {
+  const travelerHeader = document.querySelector(".traveler-header");
+  const travelerView = document.querySelector(".traveler-view");
   travelerHeader.classList.remove("hidden");
   travelerView.classList.remove("hidden");
   loginPage.classList.add("hidden");
-}
+};
+
+function showAgentView() {
+  const agentHeader = document.querySelector(".agent-header");
+  const agentView = document.querySelector(".agent-view");
+  agentHeader.classList.remove("hidden");
+  agentView.classList.remove("hidden");
+  loginPage.classList.add("hidden");
+};
 
 function displayTripCards() {
-  // let tripsGlide = document.querySelector(".glide__slides");
-  // traveler.getTrips(tripRepository).forEach(trip => {
-  //   let tripCard = document.createElement("li");
-  //   tripCard.classList.add("trip-card");
-  //   tripsGlide.appendChild(tripCard);
-  //   tripCard.classList.add("glide__slide");
-  //   tripCard.innerHTML += `
-  //   <p class="card-label">Location:</p> <p class="card-info">${destinationRepository.getDestination(trip.destinationID).destination} </p>
-  //   <p class="card-label">Date:</p> <p class="card-info">${trip.date} </p>
-  //   <p class="card-label">Duration:</p> <p class="card-info">${trip.duration} days </p>
-  //   <p class="card-label">Status:</p> <p class="card-info">${trip.status} </p>
-  //   `
-  //   new Glide('.glide', {
-  //     type: 'carousel',
-  //     startAt: 0,
-  //     perView: 1,
-  //     rewind: false,
-  //     peek: {
-  //       before: 0,
-  //       after: 0
-  //     },
-  //     focusAt: "center"
-  //   }).mount()
-  // });
   let tripCards = document.querySelector(".trip-cards");
   tripCards.innerHTML = " ";
   traveler.getTrips(tripRepository).forEach(trip => {
@@ -198,14 +194,63 @@ function displayTripCards() {
     });
   };
 
+function displayPendingCards() {
+  let pendingCards = document.querySelector(".pending-cards");
+  pendingCards.innerHTML = " ";
+  tripRepository.getAllPendingTrips().forEach(trip => {
+    let pendingCard = document.createElement("article");
+    pendingCard.classList.add("pending-card");
+    pendingCards.appendChild(pendingCard);
+    pendingCard.innerHTML += `
+    <p class="card-label">Location:</p> <p class="card-info">${destinationRepository.getDestination(trip.destinationID).destination} </p>
+    <p class="card-label">Date:</p> <p class="card-info">${trip.date} </p>
+    <p class="card-label">Duration:</p> <p class="card-info">${trip.duration} days</p>
+    <p class="card-label">Status:</p> <p class="card-info">${trip.status} </p>
+    <div class="button-wrapper">
+    <button class="approve" id="approve-trip${trip.id}">Approve</button>
+    <button class="delete" id="delete-trip${trip.id}">Delete</button>
+    </div>`
+    document.querySelector(`#approve-trip${trip.id}`).addEventListener("click", (event) => {
+      event.preventDefault()
+      postApprovedTrip(trip)
+      .then((data) => {
+        tripRepository.approveTripByID(data.updatedTrip.id)
+        displayPendingCards()
+      })
+    })
+    document.querySelector(`#delete-trip${trip.id}`).addEventListener("click", (event) => {
+      event.preventDefault()
+      deleteTrip(trip)
+      .then(() => {
+        tripRepository.deleteTripByID(trip.id)
+        displayPendingCards()
+      })
+    })
+  });
+};
+
+function displayTravelersOnTripsToday() {
+  const travelersOnTrips = document.querySelector(".amount-of-travelers");
+  travelersOnTrips.innerHTML = 
+  `~We have ${tripRepository.getTravelersOnTripsToday(date)} travelers on adventures today~`
+};
+
+function displayEarnings() {
+  const yearlyEarnings = document.querySelector(".amount-earned-this-year");
+  const totalEarnings = document.querySelector(".amount-earned-total");
+  yearlyEarnings.innerHTML = 
+  `We have earned ${tripRepository.calculateYearlyAgentEarnings(destinationRepository)} this year!`;
+  totalEarnings.innerHTML = 
+  `We have earned ${tripRepository.calculateTotalAgentEarnings(destinationRepository)} overall!`;
+};
+
 function displayAmountSpent() {
-  let amountSpentText = document.querySelector(".total-spent");
-  amountSpentText.innerHTML = `
-  <p class="total-spent"> ~You have spent $${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} total on adventures to new worlds~ </p>`
+  let totalAmountSpentText = document.querySelector(".total-spent");
+  totalAmountSpentText.innerHTML = `
+  <p class="total-spent"> ~You have spent $${traveler.calculateYearlyAmountSpent(tripRepository, destinationRepository)} on adventures this year, and $${traveler.calculateTotalAmountSpent(tripRepository, destinationRepository)} overall on adventures to new worlds~ </p>`
 };
 
 function dateFormatter() {
-  let date = dayjs();
   const departureField = document.querySelector("#departure-date");
   const returnField = document.querySelector("#return-date");
   departureField.setAttribute("min", date.format("YYYY-MM-DD"));
@@ -241,6 +286,16 @@ function enableButton() {
     submitButton.removeAttribute("disabled");
   };
 };
+
+// function searchForTraveler() {
+//   if()
+//   const travelerName = searchForm.input;
+//   console.log(travelerName)
+//   const userID = travelerRepository.getTravelerByName(travelerName);
+//   console.log(userID)
+//   traveler.getTrips(userID);
+//   traveler.calculateTotalAmountSpent();
+// };
 
 function displayAmountSpentChart() {
   const totalCost = traveler.calculateAmountSpentPerTrip(tripRepository, destinationRepository);

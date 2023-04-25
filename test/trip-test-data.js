@@ -64,7 +64,7 @@ const tripTestData = [
     "userID": 5,
     "destinationID": 5,
     "travelers": 5,
-    "date": "2022/5/28",
+    "date": "2023/4/21",
     "duration": 20,
     "status": "approved",
     "suggestedActivities": []
@@ -74,7 +74,7 @@ const tripTestData = [
     "userID": 7,
     "destinationID": 9,
     "travelers": 6,
-    "date": "2022/02/07",
+    "date": "2023/02/07",
     "duration": 4,
     "status": "approved",
     "suggestedActivities": []

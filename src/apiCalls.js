@@ -34,9 +34,36 @@ function postNewTrip(trip) {
   .then(response => response.json())
 }
 
+function postApprovedTrip(trip) {
+  return fetch("http://localhost:3001/api/v1/updateTrip", {
+    method: 'POST',
+    body: JSON.stringify({
+        id: trip.id, 
+        status: "approved", 
+      }
+    ),
+    headers: {
+      'content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+}
+
+function deleteTrip(trip) {
+  return fetch(`http://localhost:3001/api/v1/trips/${trip.id}`, {
+    method:'DELETE',
+    headers: {
+      'content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+}
+
 export {
   fetchDestinations,
   fetchTrips,
   fetchTravelers,
-  postNewTrip
+  postNewTrip,
+  postApprovedTrip,
+  deleteTrip
 };
