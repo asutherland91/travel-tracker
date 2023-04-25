@@ -40,9 +40,12 @@ main {
 
 .welcome-header {
   font-size:  32px;
-  margin: 2% 0% 0% 2%;
   white-space: nowrap;
   color: white
+}
+
+h1 {
+  margin: 2% 0% 2% 2%;
 }
 
 p {
@@ -96,7 +99,8 @@ margin: 0px;
 }
 
 .catbus-logo {
-  height: 100px
+  height: 100px;
+  margin-top: 1%;
 }
 
 .cute-mini-totoros {

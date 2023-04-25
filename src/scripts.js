@@ -1,15 +1,15 @@
 //3rd party libraries
-const dayjs = require('dayjs')
-import Chart from 'chart.js/auto';
-Chart.defaults.color = "#000000"
-var isBetween = require('dayjs/plugin/isBetween')
-dayjs.extend(isBetween)
+const dayjs = require("dayjs");
+import Chart from "chart.js/auto";
+Chart.defaults.color = "#000000";
+var isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
 
 //class and repo imports
-import DestinationRepository from './classes/DestinationRepository';
-import TripRepository from './classes/TripRepository';
-import TravelerRepository from './classes/TravelerRepository';
-import Traveler from './classes/Traveler'
+import DestinationRepository from "./classes/DestinationRepository";
+import TripRepository from "./classes/TripRepository";
+import TravelerRepository from "./classes/TravelerRepository";
+import Traveler from "./classes/Traveler";
 
 //api fetches
 import {
@@ -19,14 +19,14 @@ import {
   postNewTrip,
   postApprovedTrip,
   deleteTrip
-} from './apiCalls'
+} from "./apiCalls"
 
 //stylesheet import
-import './css/styles.css';
+import "./css/styles.css";
 
 
 // image imports
-import './images/background-img.jpg'
+import "./images/background-img.jpg"
 import "./images/catbusv3.png"
 import "./images/jumping-totoro.png"
 
@@ -47,41 +47,40 @@ const form = document.querySelector(".form");
 const pendingEstimate = document.querySelector(".pending-estimate");
 const confirmButton = document.querySelector(".confirm-button");
 const cancelButton = document.querySelector(".cancel-button");
-const estimateValue = document.querySelector(".estimate-value");
 const formInputs = document.querySelectorAll(".form input");
 const destinationSelector = document.querySelector("#destination-selector");
 const departureDate = document.querySelector("#departure-date");
-const usernameInput = document.querySelector("#login");
-const passwordInput = document.querySelector("#password");
 const loginPage = document.querySelector(".login-page");
+const greeting = document.querySelector(".welcome-header");
 const loginButton = document.querySelector("#login-button");
 
 
 // eventListeners
-submitButton.addEventListener('click', function (event) {
+submitButton.addEventListener("click", function (event) {
   event.preventDefault();
   pendingTrip = getTripValues();
   hideForm();
   showPending();
+  const estimateValue = document.querySelector(".estimate-value");
   estimateValue.innerHTML = traveler.newTripEstimate(pendingTrip, destinationRepository);
 });
 
-cancelButton.addEventListener('click', event => {
+cancelButton.addEventListener("click", event => {
   event.preventDefault();
   hidePending();
   showForm();
 });
 
-loginButton.addEventListener('click', event => {
+loginButton.addEventListener("click", event => {
   event.preventDefault();
   login();
 });
 
-departureDate.addEventListener('change', updateMinReturn);
+departureDate.addEventListener("change", updateMinReturn);
 
-confirmButton.addEventListener('click', event => {
+confirmButton.addEventListener("click", event => {
   event.preventDefault();
-  postNewTrip({
+  postNewTrip( {
     id: tripRepository.trips.length + 1,
     userID: parseInt(traveler.id),
     destinationID: parseInt(pendingTrip.destinationID),
@@ -90,13 +89,13 @@ confirmButton.addEventListener('click', event => {
     duration: pendingTrip.duration,
   })
   .then(data => {
-    if(data.newTrip){
+    if(data.newTrip) {
       tripRepository.addNewTrip(data.newTrip);
       displayTripCards();
       hidePending();
       showForm();
     }
-    else{
+    else {
       throw new Error();
     }
   })
@@ -106,17 +105,17 @@ confirmButton.addEventListener('click', event => {
   })
 });
 
-errorButton.addEventListener('click', function (event) {
+errorButton.addEventListener("click", function (event) {
   event.preventDefault();
   hideError();
   showForm();
 });
 
 formInputs.forEach(input => {
-  input.addEventListener('change', enableButton);
+  input.addEventListener("change", enableButton);
 });
 
-destinationSelector.addEventListener('change', enableButton);
+destinationSelector.addEventListener("change", enableButton);
 
 Promise.all([fetchDestinations(), fetchTrips(), fetchTravelers()])
   .then(([destinationData, tripData, travelerData]) => {
@@ -139,6 +138,8 @@ function populateDestinationDropdown() {
 };
 
 function login() {
+  const usernameInput = document.querySelector("#login");
+  const passwordInput = document.querySelector("#password");
   if(usernameInput.value.startsWith("traveler") && passwordInput.value === "travel") {
     const userID = parseInt(usernameInput.value.slice(8));
     traveler = travelerRepository.getTravelerById(userID);
@@ -153,6 +154,10 @@ function login() {
     displayEarnings();
     displayTravelersOnTripsToday(date);
     showAgentView();
+  }
+  else {
+    const loginError = document.querySelector(".login-error");
+    loginError.classList.remove("hidden");
   };
 };
 
@@ -208,8 +213,8 @@ function displayPendingCards() {
       postApprovedTrip(trip)
       .then((data) => {
         if(data) {
-          tripRepository.approveTripByID(data.updatedTrip.id)
-          displayPendingCards()
+          tripRepository.approveTripByID(data.updatedTrip.id);
+          displayPendingCards();
         }
         else {
           throw new Error;
@@ -224,8 +229,8 @@ function displayPendingCards() {
       deleteTrip(trip)
       .then((data) => {
         if(data) {
-        tripRepository.deleteTripByID(trip.id)
-        displayPendingCards()
+        tripRepository.deleteTripByID(trip.id);
+        displayPendingCards();
         }
         else {
           throw new Error;
@@ -233,9 +238,9 @@ function displayPendingCards() {
       })
       .catch((error) => {
         alert("Error fetching data:" + error);
-      })
-    })
-  })
+      });
+    });
+  });
 };
 
 function displayTravelersOnTripsToday() {
@@ -260,7 +265,7 @@ function dateFormatter() {
   const departureField = document.querySelector("#departure-date");
   const returnField = document.querySelector("#return-date");
   departureField.setAttribute("min", date.format("YYYY-MM-DD"));
-  returnField.setAttribute("min", date.add(1, "day").format("YYYY-MM-DD"))
+  returnField.setAttribute("min", date.add(1, "day").format("YYYY-MM-DD"));
 };
 
 function updateMinReturn() {
@@ -277,12 +282,11 @@ function getTripValues() {
   let dateReturnValue = dayjs(document.querySelector("#return-date").value);
   let travelerValue = document.querySelector("#traveler-count").value;
   let destinationValue = document.querySelector("#destination-selector").value;
-  let duration = dateReturnValue.diff(dateGoValue, 'day');
+  let duration = dateReturnValue.diff(dateGoValue, "day");
   return {date: dateGoValue.format("YYYY/MM/DD"), destinationID: parseInt(destinationValue), travelers: travelerValue, duration: duration}
 };
 
 function displayGreeting() {
-  const greeting = document.querySelector('.welcome-header');
   greeting.innerHTML = `
   <h1 class="welcome-header">Greetings ${traveler.getFirstName()}</h1>`
 };

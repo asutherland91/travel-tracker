@@ -2,7 +2,6 @@ import {
 expect
 } from 'chai';
 import Traveler from '../src/classes/Traveler';
-import TravelerRepository from '../src/classes/TravelerRepository';
 import DestinationRepository from '../src/classes/DestinationRepository';
 import TripRepository from '../src/classes/TripRepository';
 import travelerTestData from './traveler-test-data';

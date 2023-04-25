@@ -1,7 +1,7 @@
 class DestinationRepository {
   constructor(destinationData) {
     this.destinations = destinationData;
-  }
+  };
 
   getDestination(destinationID) {
     const destination = this.destinations.find(location => {
@@ -12,8 +12,7 @@ class DestinationRepository {
 
   getDestinations() {
     return this.destinations;
-  }
-  
-}
+  };
+};
 
 export default DestinationRepository;

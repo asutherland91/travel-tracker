@@ -31,7 +31,7 @@ class Traveler {
         const destination = destinationRepository.getDestination(trip.destinationID);
         total += (trip.travelers * destination.estimatedFlightCostPerPerson);
         total += (trip.duration * destination.estimatedLodgingCostPerDay);
-      }
+      };
       return total;
     }, 0);
     return (amountSpent * 1.1).toFixed(2);
@@ -60,12 +60,11 @@ class Traveler {
         const destination = destinationRepository.getDestination(trip.destinationID);
         total += (trip.travelers * destination.estimatedFlightCostPerPerson);
         total += (trip.duration * destination.estimatedLodgingCostPerDay);
-      }
+      };
       return total;
     }, 0);
     return (amountSpent * 1.1).toFixed(2);
-  };
-  
+  }; 
 }
 
 export default Traveler;
