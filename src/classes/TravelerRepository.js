@@ -12,11 +12,19 @@ class TravelerRepository {
 
   getTravelerById(userID) {
     const travelerData = this.travelers.find(traveler => traveler.id === userID);
-    console.log(travelerData)
     if(travelerData) {
       return new Traveler(travelerData);
     }
   }
+
+  getTravelerByName(travelerName) {
+    const travelerData = this.travelers.find(traveler => traveler.name.includes(travelerName));
+    if(travelerData) {
+      return new Traveler(travelerData);
+    }
+  }
+
+  
 }
 
 export default TravelerRepository;

@@ -29,16 +29,27 @@ describe('Traveler Repository', () => {
     expect(testRepository.getRandomTraveler()).to.be.an.instanceOf(Traveler);
   });
 
-  it("should be able to return a specific traveler", () => {
-    userID = 2
-    expect(testRepository.getTravelerById(userID)).to.deep.equal(
+  it("should be able to return a specific traveler by id", () => {
+    expect(testRepository.getTravelerById(2)).to.deep.equal(
       {
       "id": 2,
       "name": "Rachael Vaughten",
       });
   });
+
   it("shouldn't be able to return a traveler if the ID doesn't exist", () => {
-    userID = 99;
-    expect(testRepository.getTravelerById(userID)).to.equal(undefined);
+    expect(testRepository.getTravelerById(99)).to.equal(undefined);
+  });
+
+  it("should be able to return a specific traveler by name", () => {
+    expect(testRepository.getTravelerByName("Rachael")).to.deep.equal(
+      {
+      "id": 2,
+      "name": "Rachael Vaughten",
+      });
+  });
+
+  it("shouldn't be able to return a traveler if the name doesn't exist", () => {
+    expect(testRepository.getTravelerByName("Steve")).to.equal(undefined);
   });
 });

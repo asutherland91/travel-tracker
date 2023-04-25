@@ -3,13 +3,21 @@ import {
 } from 'chai';
 import TripRepository from '../src/classes/TripRepository';
 import tripTestData from './trip-test-data';
+import travelerTestData from './traveler-test-data';
 import DestinationRepository from '../src/classes/DestinationRepository';
+import destinationTestData from './destination-test-data';
+const dayjs = require('dayjs')
+var isBetween = require('dayjs/plugin/isBetween')
+dayjs.extend(isBetween)
 
 
 describe('Trip Repository', () => {
-  var testRepository;
+  let testRepository;
+  let destinationRepository;
+
   beforeEach(() => {
     testRepository = new TripRepository(tripTestData);
+    destinationRepository = new DestinationRepository(destinationTestData)
   });
 
   it('should be a function', () => {
@@ -38,7 +46,8 @@ describe('Trip Repository', () => {
       "duration": 18,
       "status": "approved",
       "suggestedActivities": []
-      },{
+      },
+      {
       "id": 4,
       "userID": 1,
       "destinationID": 9,
@@ -47,7 +56,8 @@ describe('Trip Repository', () => {
       "duration": 10,
       "status": "approved",
       "suggestedActivities": []
-      },{"id": 10,
+      },
+      {"id": 10,
       "userID": 1,
       "destinationID": 10,
       "travelers": 6,
@@ -61,6 +71,29 @@ describe('Trip Repository', () => {
 
   it("should return an empty array if an incorrect travelerID is given", () => {
     expect(testRepository.getTrips(70)).to.deep.equal([]);
+  });
+
+  it("should return an array of trips that status is pending", () => {
+    expect(testRepository.getAllPendingTrips(tripTestData)).to.deep.equal([{
+      "id": 1,
+      "userID": 2,
+      "destinationID": 1,
+      "travelers": 1,
+      "date": "2022/09/16",
+      "duration": 8,
+      "status": "pending",
+      "suggestedActivities": []
+      },
+      {"id": 10,
+      "userID": 1,
+      "destinationID": 10,
+      "travelers": 6,
+      "date": "2022/07/23",
+      "duration": 17,
+      "status": "pending",
+      "suggestedActivities": []
+      },
+    ]);
   });
 
   it("should have last item in the array equal the new trip added", () => {
@@ -88,4 +121,18 @@ describe('Trip Repository', () => {
       }
     )
   });
+
+  it("should calculate the amount of money the agency has earned in total", () => {
+    expect(testRepository.calculateTotalAgentEarnings(destinationRepository)).to.equal("3147.50");
+  });
+
+  it("should calculate the amount of money the agency has earned this year in total", () => {
+    expect(testRepository.calculateYearlyAgentEarnings(destinationRepository)).to.equal("1235.00");
+  });
+
+  it("should return an array of trips that in progress", () => {
+    let date = dayjs();
+    expect(testRepository.getTravelersOnTripsToday(date)).to.equal(1);
+  });
+
 });
