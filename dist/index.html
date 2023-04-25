@@ -12,7 +12,7 @@
 <body>
   <header class="traveler-header agent-header hidden">
     <img class="catbus-logo" src="./images/catbusv3.png" alt="happy catbus with words reading 'Ghibli Travel'"/>
-    <h1 class="welcome-header traveler-header hidden">Greetings Traveler</h1>
+    <h1 class="welcome-header traveler-header text-styling hidden">Greetings Traveler</h1>
     <img class="cute-mini-totoros" src="./images/jumping-totoro.png" alt="two cute totoros one jumping in the air and the other holding a bag"/>
   </header>
     <main>
@@ -30,12 +30,12 @@
         </section>
         <div class="traveler-view hidden">
           <section class="view-trips-area">
-            <h2 class="view-trips">View trips</h2>
+            <h2 class="view-trips margin text-styling">View trips</h2>
             <section tabindex="0" class="trip-cards">
             </section>
           </section>
           <section class="request-trip-area">
-            <h2 class="request-trips">Request trip</h2>
+            <h2 class="request-trips text-styling">Request trip</h2>
             <section class="error-message hidden"> 
               <p>Please check your trip request and try again!<button class="error-button">Exit</button></p>
             </section>
@@ -60,30 +60,23 @@
             </form>
           </section>
           <section class="amount-spent-area">
-            <p class="yearly-spent">yearly spent</p>
-            <p class="total-spent">Total spent</p>
+            <p class="total-spent text-styling">Total spent</p>
             <div class="chart-container">
               <canvas id="chart"></canvas>
           </div>
           </section>
         </div>
         <div class="agent-view hidden">
-          <section class="search-area">
-            <form class="search-form">
-              <label class="label" for="search">Traveler Name</label><br>
-              <input type="text" id="search"> <br>
-              <button class="search-button" id="search-button">Search for Traveler</button>
-            </form>
-          </section>
-          <section class="amount-earned-section">
-            <p class="amount-earned-this-year"></p>
-            <p class="amount-earned-total"></p>
-          </section>
-          <section class="travelers-on-trips">
-            <p class="amount-of-travelers">~We have 3 travelers on adventures today~</p>
+          <div class="bottom-wrapper">
+            <section class="amount-earned-section">
+              <p class="amount-earned-total text-styling"></p>
+            </section>
+          </div>
+          <section class="travelers-on-trips ">
+            <p class="amount-of-travelers text-styling">~We have 3 travelers on adventures today~</p>
           </section>
           <section class="pending-trips-section">
-            <h2 class="view-pending-trips">View pending trips</h2>
+            <h2 class="view-pending-trips text-styling">View pending trips</h2>
             <section tabindex="0" class="pending-cards">
               </section>
             </section>
