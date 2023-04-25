@@ -8,7 +8,6 @@ import Traveler from '../src/classes/Traveler';
 
 describe('Traveler Repository', () => {
   let testRepository;
-  let userID
   beforeEach(() => {
     testRepository = new TravelerRepository(travelerTestData);
   });

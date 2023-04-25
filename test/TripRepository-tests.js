@@ -3,12 +3,11 @@ import {
 } from 'chai';
 import TripRepository from '../src/classes/TripRepository';
 import tripTestData from './trip-test-data';
-import travelerTestData from './traveler-test-data';
 import DestinationRepository from '../src/classes/DestinationRepository';
 import destinationTestData from './destination-test-data';
-const dayjs = require('dayjs')
-var isBetween = require('dayjs/plugin/isBetween')
-dayjs.extend(isBetween)
+const dayjs = require('dayjs');
+var isBetween = require('dayjs/plugin/isBetween');
+dayjs.extend(isBetween);
 
 
 describe('Trip Repository', () => {
@@ -134,5 +133,4 @@ describe('Trip Repository', () => {
     let date = dayjs();
     expect(testRepository.getTravelersOnTripsToday(date)).to.equal(1);
   });
-
 });

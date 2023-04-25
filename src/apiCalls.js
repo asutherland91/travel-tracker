@@ -11,7 +11,7 @@ function fetchTrips() {
 function fetchDestinations() {
   return fetch("http://localhost:3001/api/v1/destinations")
     .then(response => response.json());
-}
+};
 
 function postNewTrip(trip) {
   return fetch("http://localhost:3001/api/v1/trips", {
@@ -32,7 +32,7 @@ function postNewTrip(trip) {
     }
   })
   .then(response => response.json())
-}
+};
 
 function postApprovedTrip(trip) {
   return fetch("http://localhost:3001/api/v1/updateTrip", {
@@ -47,7 +47,7 @@ function postApprovedTrip(trip) {
     }
   })
   .then(response => response.json())
-}
+};
 
 function deleteTrip(trip) {
   return fetch(`http://localhost:3001/api/v1/trips/${trip.id}`, {
@@ -57,7 +57,7 @@ function deleteTrip(trip) {
     }
   })
   .then(response => response.json())
-}
+};
 
 export {
   fetchDestinations,
