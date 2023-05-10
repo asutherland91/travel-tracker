@@ -47,11 +47,11 @@ Follow the setup instructions provided [here](https://github.com/turingschool-ex
 ### Setting up the Frontend Site
 
 Fork [this](https://github.com/asutherland91/travel-tracker) repository to your GitHub account.
-Copy SSH key on GitHub inside the code dropdown.
-Using the terminal, run git clone [SSH key here].
-cd into the repository.
-Open it in your text editor.
-Run npm install
-Run npm start
-Click the hyperlink where the project is running to launch the application in the web browser or enter http://localhost:8080/ into your web browser.
+- Copy SSH key on GitHub inside the code dropdown.
+- Using the terminal, run git clone [SSH key here].
+- cd into the repository.
+- Open it in your text editor.
+- Run npm install
+- Run npm start
+- Click the hyperlink where the project is running to launch the application in the web browser or enter http://localhost:8080/ into your web browser.
 
