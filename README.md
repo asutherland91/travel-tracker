@@ -1,4 +1,4 @@
-# Ruffled Rants
+# Ghibli Travel
 ## Table of Contents
   - [Introduction](#Introduction)
   - [Technologies](#Technologies)
